@@ -3,157 +3,71 @@ package com.skilldistillery.tracker.services;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.skilldistillery.tracker.entities.Borrow;
+import com.skilldistillery.tracker.repositories.BorrowRepository;
 
 public class BorrowServiceImpl implements BorrowService {
 
+	@Autowired
+	private BorrowRepository repo;
+
 	@Override
 	public List<Borrow> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return repo.findAll();
 	}
 
 	@Override
-	public List<Borrow> findAll(Sort sort) {
-		// TODO Auto-generated method stub
-		return null;
+	public Borrow findById(int id) {
+		Optional<Borrow> opt = repo.findById(id);
+		Borrow borrow = null;
+		if (opt.isPresent()) {
+			borrow = opt.get();
+		}
+		return borrow;
 	}
 
 	@Override
-	public List<Borrow> findAllById(Iterable<Integer> ids) {
-		// TODO Auto-generated method stub
-		return null;
+	public Borrow create(Borrow borrow) {
+		try {
+			repo.saveAndFlush(borrow);
+		} catch (Exception e) {
+			borrow = null;
+			e.printStackTrace();
+		}
+		return borrow;
 	}
 
 	@Override
-	public <S extends Borrow> List<S> saveAll(Iterable<S> entities) {
-		// TODO Auto-generated method stub
-		return null;
+	public Borrow update(int id, Borrow borrow) {
+		Optional<Borrow> opt = repo.findById(id);
+		Borrow managedBorrow = null;
+		if (opt.isPresent()) {
+			managedBorrow = opt.get();
+			managedBorrow.setName(borrow.getName());
+			managedBorrow.setValue(borrow.getValue());
+			managedBorrow.setDescription(borrow.getDescription());
+			managedBorrow.setReturned(borrow.isReturned());
+			managedBorrow.setDateBorrowed(borrow.getDateBorrowed());
+			managedBorrow.setDateReturned(borrow.getDateReturned());
+			managedBorrow.setBorrowedFrom(borrow.getBorrowedFrom());
+			managedBorrow.setBorrowed(borrow.isBorrowed());
+			managedBorrow.setLent(borrow.isLent());
+			repo.saveAndFlush(managedBorrow);
+		}
+		return managedBorrow;
 	}
 
-	@Override
-	public void flush() {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
-	public <S extends Borrow> S saveAndFlush(S entity) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void deleteInBatch(Iterable<Borrow> entities) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void deleteAllInBatch() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public Borrow getOne(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public <S extends Borrow> List<S> findAll(Example<S> example) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public <S extends Borrow> List<S> findAll(Example<S> example, Sort sort) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Page<Borrow> findAll(Pageable pageable) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public <S extends Borrow> S save(S entity) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Optional<Borrow> findById(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean existsById(Integer id) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public long count() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void deleteById(Integer id) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void delete(Borrow entity) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void deleteAll(Iterable<? extends Borrow> entities) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void deleteAll() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public <S extends Borrow> Optional<S> findOne(Example<S> example) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public <S extends Borrow> Page<S> findAll(Example<S> example, Pageable pageable) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public <S extends Borrow> long count(Example<S> example) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public <S extends Borrow> boolean exists(Example<S> example) {
-		// TODO Auto-generated method stub
-		return false;
+	public Boolean deleteBorrow(int id) {
+		Boolean deleted = false;
+		if (repo.existsById(id)) {
+		repo.deleteById(id);
+		deleted = true;
+		}
+		return deleted;
 	}
 
 }

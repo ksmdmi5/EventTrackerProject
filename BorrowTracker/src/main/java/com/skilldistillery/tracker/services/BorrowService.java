@@ -1,9 +1,14 @@
 package com.skilldistillery.tracker.services;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
 
 import com.skilldistillery.tracker.entities.Borrow;
 
-public interface BorrowService extends JpaRepository<Borrow, Integer> {
+public interface BorrowService {
 
+	public List<Borrow> findAll();
+	Borrow create(Borrow borrow);
+	Borrow update(int id, Borrow borrow);
+	Borrow findById(int id);
+	Boolean deleteBorrow (int id);
 }

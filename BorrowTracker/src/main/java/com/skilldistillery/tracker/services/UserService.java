@@ -1,9 +1,14 @@
 package com.skilldistillery.tracker.services;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
 
 import com.skilldistillery.tracker.entities.User;
 
-public interface UserService extends JpaRepository<User, Integer> {
+public interface UserService {
 
+	public List<User> findAll();
+	User create(User user);
+	User update(int id, User user);
+	User findById(int id);
+	Boolean deleteUser (int id);
 }
