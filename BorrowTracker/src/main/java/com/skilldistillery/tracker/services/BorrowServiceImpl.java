@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.skilldistillery.tracker.entities.Borrow;
+import com.skilldistillery.tracker.entities.User;
 import com.skilldistillery.tracker.repositories.BorrowRepository;
 
 @Service
@@ -32,6 +33,9 @@ public class BorrowServiceImpl implements BorrowService {
 
 	@Override
 	public Borrow create(Borrow borrow) {
+		User user = new User();
+		user.setId(1);
+		borrow.setUser(user);
 		try {
 			repo.saveAndFlush(borrow);
 		} catch (Exception e) {
@@ -56,6 +60,9 @@ public class BorrowServiceImpl implements BorrowService {
 			managedBorrow.setBorrowedFrom(borrow.getBorrowedFrom());
 			managedBorrow.setBorrowed(borrow.isBorrowed());
 			managedBorrow.setLent(borrow.isLent());
+			User user = new User();
+			user.setId(1);
+			managedBorrow.setUser(user);
 			repo.saveAndFlush(managedBorrow);
 		}
 		return managedBorrow;

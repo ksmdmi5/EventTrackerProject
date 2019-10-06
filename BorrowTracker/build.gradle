@@ -14,7 +14,15 @@ repositories {
 ext {
     junit5Version = "5.4.2" 
 }
+apply plugin: 'war'
+war {
+  enabled = true
+  archiveName = "${baseName}.war"     
+  destinationDir = file("../")         
+}
 dependencies {
+	providedRuntime ('org.springframework.boot:spring-boot-starter-tomcat')
+	implementation ('org.springframework.boot:spring-boot-starter-tomcat')
 	compile project(':JPAEntityTracker')
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'

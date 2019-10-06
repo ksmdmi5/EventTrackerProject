@@ -23,8 +23,8 @@ public class BorrowController {
 	  return svc.findAll();
 	}
 	
-	@GetMapping("borrows/{bid}")
-	public Borrow getBorrow(@PathVariable("bid") Integer borrowId, HttpServletResponse resp) {
+	@GetMapping("borrows/{id}")
+	public Borrow getBorrow(@PathVariable("id") Integer borrowId, HttpServletResponse resp) {
 		Borrow borrow = svc.findById(borrowId);
 		if (borrow == null) {
 			resp.setStatus(404);
@@ -58,8 +58,8 @@ public class BorrowController {
 		return borrow;
 	}
 	
-	@PutMapping("borrows/{bid}")
-	public Borrow replaceBorrow(@PathVariable("bid") Integer borrowId,@RequestBody Borrow borrow,
+	@PutMapping("borrows/{id}")
+	public Borrow replaceBorrow(@PathVariable("id") Integer borrowId,@RequestBody Borrow borrow,
 			HttpServletResponse resp) {
 		try {
 			borrow = svc.update(borrowId, borrow);
@@ -73,10 +73,10 @@ public class BorrowController {
 		return borrow;
 	}
 	
-	@DeleteMapping("borrows/{bid}")
-	public void destroyBorrow(@PathVariable("bid") Integer bid, HttpServletResponse resp) {
+	@DeleteMapping("borrows/{id}")
+	public void destroyBorrow(@PathVariable("id") Integer id, HttpServletResponse resp) {
 		try {
-			Boolean deleted = svc.deleteBorrow(bid);
+			Boolean deleted = svc.deleteBorrow(id);
 			if(deleted) {
 				resp.setStatus(204);
 			} else {
