@@ -7,7 +7,9 @@
 </head>
 <body>
   <h1>Welcome to the Borrow Tracker</h1>
-
+ <div id="totalValue">
+   <h2 id="itemValue"></h2>
+   </div>
    <div id="borrowedItem">
   		<h2>Item:</h2>
   		<form name="borrowForm">
@@ -25,9 +27,15 @@
   			Item: <input type='text' name='name' size="100"/><br>
   			Value: $<input type='text' name='value'/><br>
   			Description: <input type='text' name='description' size="100"/><br>
-  			Borrowed From: <input type='text' name='borrowedFrom'/>
+  			Borrowed From: <input type='text' name='borrowedFrom'/><br>
   			<input type="checkbox" name="returned" checked>
-  			<label for="returned">Returned</label>
+  			<label for="returned">Returned?</label>
+  			
+  			<input type="checkbox" name="borrowed" checked>
+  			<label for="borrowed">Borrowed?</label><br>
+  			
+  			<input type="checkbox" name="lent" checked>
+  			<label for="lent">Lent?</label>
   			<br>
   		<button name="submit" type="submit" >Submit</button>
   		</form>
@@ -44,9 +52,13 @@
   			Item: <input type='text' name='name' placeholder="Item Name"size="100"/><br>
   			Value: $<input type='number' name='value' placeholder="Value of Item"/><br>
   			Description: <input type='text' name='description' size="100"/><br>
-  			Borrowed From: <input type='text' name='borrowedFrom'/>
+  			Borrowed From: <input type='text' name='borrowedFrom'/><br>
   			<input type="checkbox" name="returned" checked>
   			<label for="returned">Returned</label>
+  			<input type="checkbox" name="borrowed" checked>
+  			<label for="borrowed">Borrowed?</label>
+  			<input type="checkbox" name="lent" checked>
+  			<label for="lent">Lent?</label>
   			<br>
   			<button name="addBorrow" type="submit" >Submit</button>
   		</form>

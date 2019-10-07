@@ -12,6 +12,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 @Entity
 public class Borrow {
 	
@@ -25,11 +28,11 @@ public class Borrow {
 	private boolean returned;
 	
 	@Column(name="date_borrowed")
-	@Temporal(TemporalType.DATE)
+	@CreationTimestamp
 	private Date dateBorrowed;
 
 	@Column(name="date_returned")
-	@Temporal(TemporalType.DATE)	
+	@UpdateTimestamp
 	private Date dateReturned;
 	
 	@Column(name="borrowed_from")

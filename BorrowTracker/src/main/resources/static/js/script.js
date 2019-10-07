@@ -2,7 +2,7 @@ window.addEventListener('load', function() {
   console.log('document loaded');
   getAll(); 
   init();
-
+  metrics();
 });
 
 function init() {
@@ -63,7 +63,9 @@ function addBorrow(){
 			value:  document.addBorrowForm.value.value,
 			description: document.addBorrowForm.description.value,
 			borrowedFrom: document.addBorrowForm.borrowedFrom.value,
-			returned: document.addBorrowForm.returned.value === "on"
+			returned: document.addBorrowForm.returned.value === "on",
+			borrowed: document.addBorrowForm.borrowed.value === "on",
+			lent: document.addBorrowForm.lent.value === "on"
 	} 
 	console.log(borrowObject);
 	xhr.send(JSON.stringify(borrowObject));
@@ -104,18 +106,27 @@ function displayAll(allBorrowed) {
 	let th3 = document.createElement('th');
 	let th4 = document.createElement('th');
 	let th5 = document.createElement('th');
+	let th6 = document.createElement('th');
+	let th7 = document.createElement('th');
+	let th8 = document.createElement('th');
 	th.textContent = "ID";
 	table.appendChild(th);
 	th1.textContent = "Item";
 	table.appendChild(th1);
 	th2.textContent = "Value";
 	table.appendChild(th2);
-	th3.textContent = "Returned";
+	th3.textContent = "Borrowed From:";
 	table.appendChild(th3);
-	th4.textContent = "Date Borrowed";
+	th4.textContent = "Returned?";
 	table.appendChild(th4);
-	th5.textContent = "Date Returned";
+	th5.textContent = "Borrowed?";
 	table.appendChild(th5);
+	th6.textContent = "Lent?";
+	table.appendChild(th6);
+	th7.textContent = "Date Borrowed";
+	table.appendChild(th7);
+	th8.textContent = "Date Returned";
+	table.appendChild(th8);
 	allBorrowed.forEach(function(borrow, index) {
 		let tr = document.createElement('tr');
 		let td = document.createElement('td');
@@ -126,6 +137,15 @@ function displayAll(allBorrowed) {
 		tr.appendChild(td);
 		td = document.createElement('td');
 		td.textContent = borrow.value;
+		tr.appendChild(td);
+		td = document.createElement('td');
+		td.textContent = borrow.borrowedFrom;
+		tr.appendChild(td);
+		td = document.createElement('td');
+		td.textContent = borrow.borrowed;
+		tr.appendChild(td);
+		td = document.createElement('td');
+		td.textContent = borrow.lent;
 		tr.appendChild(td);
 		td = document.createElement('td');
 		td.textContent = borrow.returned;
@@ -166,6 +186,12 @@ function displayOneBorrow(borrowId) {
 		oneBorrowLi.textContent = "Returned: " + oneBorrow.returned;
 		oneBorrowUl.appendChild(oneBorrowLi);
 		oneBorrowDiv.appendChild(oneBorrowUl);
+		oneBorrowLi.textContent = "Borrowed: " + oneBorrow.borrowed;
+		oneBorrowUl.appendChild(oneBorrowLi);
+		oneBorrowDiv.appendChild(oneBorrowUl);
+		oneBorrowLi.textContent = "Lent: " + oneBorrow.returned;
+		oneBorrowUl.appendChild(oneBorrowLi);
+		oneBorrowDiv.appendChild(oneBorrowUl);
 		oneBorrowLi = document.createElement('li');
 		oneBorrowLi.textContent = "Date Borrowed: " + oneBorrow.dateBorrowed;
 		oneBorrowUl.appendChild(oneBorrowLi);
@@ -190,6 +216,8 @@ function editBorrow(borrowId){
 				borrowForm.description.value = oneBorrow.description;
 				borrowForm.borrowedFrom.value = oneBorrow.borrowedFrom;
 				borrowForm.returned.value = oneBorrow.returned;
+				borrowForm.borrowed.value = oneBorrow.borrowed;
+				borrowForm.lent.value = oneBorrow.lent;
 				
 				document.editBorrowForm.submit.addEventListener('click', function(event) {
 				    event.preventDefault();
@@ -201,16 +229,18 @@ function editBorrow(borrowId){
 				    }
 				    let borrowObject = {
 							id : borrowId,
-							name : document.editBorrowForm.name.value,
-							value : document.editBorrowForm.value.value,
-							description	: document.editBorrowForm.description.value,
-							borrowedFrom : document.editBorrowForm.borrowedFrom.value,
-							returned : document.editBorrowForm.returned.value
+							name: document.addBorrowForm.name.value,
+							value:  document.addBorrowForm.value.value,
+							description: document.addBorrowForm.description.value,
+							borrowedFrom: document.addBorrowForm.borrowedFrom.value,
+							returned: document.addBorrowForm.returned.value === "on",
+							borrowed: document.addBorrowForm.borrowed.value === "on",
+							lent: document.addBorrowForm.lent.value === "on"
 					}
 				    console.log(oneBorrow);
 				    console.log(borrowObject);
 					xhr1.send(JSON.stringify(borrowObject));
-//					clearPage();
+ clearPage();
 				});
 			}
 		} 	
@@ -243,8 +273,6 @@ function getBorrowed(borrowId) {
 		if (xhr.readyState === 4) {
 			if (xhr.status < 400) {
 				let borrow = JSON.parse(xhr.responseText);
-				console.log(borrow);
-				
 				let oneBorrowDiv = document.getElementById('oneBorrow');
 				let oneBorrowUl = document.createElement('ul');
 				let oneBorrowLi = document.createElement('li');
@@ -265,11 +293,34 @@ function getBorrowed(borrowId) {
 				console.error(xhr.status + ": '" + xhr.responseText);
 			}
 		} 	
-		xhr.onreadystatechange = function() {
 	} 
-	xhr.send(null);
+			xhr.send(null);
 };
-}
+
+function metrics() {
+	 let xhr = new XMLHttpRequest();
+	 xhr.open('GET', 'api/borrows', true);
+		xhr.onreadystatechange = function() {
+	 if (xhr.readyState === 4) {
+		 if (xhr.status < 400) {
+			 var totalValue = JSON.parse(xhr.responseText);
+			 var itemValue = totalValue.length;
+			 var totalItemValue = 0;
+			 let itemValueHeader = document.getElementById('itemValue');
+			 totalValue.forEach(function(borrow, index) {
+				 console.log(totalItemValue);
+				 totalItemValue = totalItemValue + parseFloat(borrow.value);
+			 });
+			 itemValueHeader.textContent = "Total Value: $" + totalItemValue;
+		 }
+		 else {
+			 console.error(xhr.status + ": '" + xhr.responseText);
+		 		}
+	 		}
+		}
+	 xhr.send(null);
+	}
+	 
 
 function showEditForm() {
 	  var x = document.getElementById("editBorrow");
