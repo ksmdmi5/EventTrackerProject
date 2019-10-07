@@ -20,7 +20,7 @@ function init() {
 	  document.addBorrowForm.addBorrow.addEventListener('click', function(e) {
 			e.preventDefault();
 			addBorrow();
-			clearPage();
+//			clearPage();
 		});
 	  
 	  document.borrowForm.edit.addEventListener('click', function(event) {
@@ -115,7 +115,7 @@ function displayAll(allBorrowed) {
 	table.appendChild(th1);
 	th2.textContent = "Value";
 	table.appendChild(th2);
-	th3.textContent = "Borrowed From:";
+	th3.textContent = "Borrowed From:";	
 	table.appendChild(th3);
 	th4.textContent = "Returned?";
 	table.appendChild(th4);
@@ -142,13 +142,13 @@ function displayAll(allBorrowed) {
 		td.textContent = borrow.borrowedFrom;
 		tr.appendChild(td);
 		td = document.createElement('td');
+		td.textContent = borrow.returned;
+		tr.appendChild(td);
+		td = document.createElement('td');
 		td.textContent = borrow.borrowed;
 		tr.appendChild(td);
 		td = document.createElement('td');
-		td.textContent = borrow.lent;
-		tr.appendChild(td);
-		td = document.createElement('td');
-		td.textContent = borrow.returned;
+		td.textContent = borrow.lent;	
 		tr.appendChild(td);
 		table.appendChild(tr);
 		td = document.createElement('td');
@@ -240,7 +240,7 @@ function editBorrow(borrowId){
 				    console.log(oneBorrow);
 				    console.log(borrowObject);
 					xhr1.send(JSON.stringify(borrowObject));
- clearPage();
+//					clearPage();
 				});
 			}
 		} 	
