@@ -1,0 +1,70 @@
+<h1>Borrow Tracker</h1>
+
+<h1>Number of Items:<span class='badge' name="badge badge-primaary" >{{getNumBorrows()}} </span></h1>
+<div class = "card-group" id="display all"  *ngIf=!selected>
+<table class='table table-striped'>
+  <thead class='thead thead-dark'>
+    <th>Item</th>
+    <th>Borrowed From</th>
+    <th>Value</th>
+    <th>Borrowed</th>
+    <th>Lent</th>
+    <th>Returned</th>
+    <th>Check Returned</th>
+    <th>Delete</th>
+  </thead>
+  <tbody>
+<tr *ngFor='let borrow of borrows | returned: showReturned' class="hoverable"
+    [ngClass]="borrow.returned === true ? 'returned' : '' ">
+  <td (click)="displayBorrow(borrow)">{{borrow.name}}</td>
+  <td>{{borrow.borrowedFrom}}</td>
+  <td>${{borrow.value}}</td>
+  <td>{{borrow.borrowed}}</td>
+  <td>{{borrow.lent}}</td>
+  <td>{{borrow.returned}}</td>
+  <td><input type="checkbox" (change)='updateBorrow(borrow)' [(ngModel)] = "borrow.returned"></td>
+  <td><button (click)="delete(borrow.id)" class='badge badge-danger'>X</button></td>
+  </tr>
+</tbody>
+</table>
+Show Returned<input type="checkbox" name="showReturned" [(ngModel)] = 'showReturned'>
+<!-- Show Borrowed<input type="checkbox" name="showBorrowed" [(ngModel)] = 'showBorrowed'>
+Show Lent<input type="checkbox" name="showLent" [(ngModel)] = 'showLent'> -->
+</div>
+
+<div id="displayBorrowDetails" *ngIf=selected>
+<h3>{{selected.id}}
+    {{selected.name}}</h3>
+<p>
+{{selected.description}}
+{{selected.returned}}
+{{selected.value}}
+</p>
+<button (click)="setEditBorrow()">Edit</button>
+<button (click)="displayTable()">Back</button>
+<div *ngIf=editBorrow>
+    <h3>Edit</h3>
+    <form>
+      <label>Item<input type="text" name="task" [(ngModel)]="editBorrow.name"></label><br>
+      <label>Value<input type="text" name="value" [(ngModel)]="editBorrow.value"></label><br>
+    <label>Borrowed From<input type="text" name="borrowedFrom" [(ngModel)]="editBorrow.borrowedFrom"></label><br>
+    <label>Description<input type="text" name="description" [(ngModel)]="editBorrow.description"></label><br>
+    <div>
+    <label>Borrowed<input type="checkbox" name="borrowed" [(ngModel)]="editBorrow.borrowed"></label><br>
+    <label>Lent<input type="checkbox" name="lent" [(ngModel)]="editBorrow.lent"></label></div>
+    <label>Returned<input type="checkbox" name="returned" [(ngModel)]="editBorrow.returned"></label><br>
+    </form>
+    <input type="submit" value="Save" (click)="updateBorrow(editBorrow)">
+    <input type="submit" value="Cancel" (click)="editBorrow = null; slected = null">
+  </div>
+</div>
+
+<div *ngIf=!selected>
+<h3>New Item:</h3>
+<form>
+  <input type="text" name="name" placeholder="Item" [(ngModel)]="newBorrow.name"/><br>
+  <input type="submit" value="Add Item" (click)="addBorrow()">
+</form>
+</div>
+
+
